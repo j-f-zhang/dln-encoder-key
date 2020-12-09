@@ -1,0 +1,127 @@
+<html>
+
+<label for="firstName">First name</label>
+<input id="firstName" placeholder="Jane" type="text" />
+<br />
+<label for="middleName">Middle name</label>
+<input id="middleName" placeholder="Marie" type="text" />
+<br />
+<label for="lastName">Last name</label>
+<input id="lastName" placeholder="Doe" type="text" />
+<br />
+<label for="birthMonth">Month</label>
+<select id="birthMonth">
+    <option value="1">January</option>
+    <option value="2">February</option>
+    <option value="3">March</option>
+    <option value="4">April</option>
+    <option value="5">May</option>
+    <option value="6">June</option>
+    <option value="7">July</option>
+    <option value="8">August</option>
+    <option value="9">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+</select>
+<label for="birthDay">Day</label>
+<input id="birthDay" style="width: 25px" />
+<label for="birthYear">Year</label>
+<input id="birthYear" style="width: 50px" />
+<br />
+<button id="submit" onclick="computeLicenseNumber()">submit</button>
+
+<p></p>
+
+</html>
+<script>
+    function computeLicenseNumber() {
+        const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
+        const middleName = getFirstInitial(document.getElementById("middleName").value.toUpperCase());
+        const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
+        const birthDay = encodeDay(document.getElementById("birthDay").value);
+        const birthMonth = encodeMonth(document.getElementById("birthMonth").value);
+        const birthYear = encodeYear(document.getElementById("birthYear").value);
+
+        const blobStart = lastName + firstName + middleName + birthYear
+        const blobFinish = birthMonth + birthDay;
+        const cs = checkSum(blobStart + blobFinish);
+
+        const DLN = blobStart + cs + blobFinish;
+        alert(DLN);
+    }
+
+    function getFirstInitial(name) {
+        return name[0];
+    }
+
+    function encodeLastName(name) {
+        let code = "";
+        for (let i = 0; i < 5; i++) {
+            if (name.length > i) {
+                code += name[i];
+            }
+            else {
+                code += "*";
+            }
+        }
+        return code;
+    }
+
+    function encodeYear(year) {
+        return 100 - year.substring(year.length - 2, year.length);
+    }
+
+    function encodeMonth(month) {
+        let months = ["B", "C", "D", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
+        return months[month - 1];
+    }
+
+    function encodeDay(day) {
+        let days = ["A", "B", "C", "D", "E", "F", "G", "H", "Z", "S", "J", "K", "L", "M", "N", "W", "P", "Q", "R", "0", "1", "2", "3", "4", "5", "2", "7", "8", "9", "T", "U"];
+        return days[day - 1];
+    }
+
+    function checkSum(blob) {
+        let nanDigits = {
+            "*": "4",
+            "A": "1",
+            "B": "2",
+            "C": "3",
+            "D": "4",
+            "E": "5",
+            "F": "6",
+            "G": "7",
+            "H": "8",
+            "I": "9",
+            "J": "1",
+            "K": "2",
+            "L": "3",
+            "M": "4",
+            "N": "5",
+            "O": "6",
+            "P": "7",
+            "Q": "8",
+            "R": "9",
+            "S": "2",
+            "T": "3",
+            "U": "4",
+            "V": "5",
+            "W": "6",
+            "X": "7",
+            "Y": "8",
+            "Z": "9"
+        }
+
+        let numBlob = "";
+        for (i = 0; i < blob.length; i++) {
+            if (isNaN(blob[i])) {
+                numBlob += nanDigits[blob[i].toUpperCase()];
+            }
+            else {
+                numBlob += blob[i];
+            }
+        }
+        return (numBlob[0] - numBlob[1] + numBlob[2] - numBlob[3] + numBlob[4] - numBlob[5] + numBlob[6] - numBlob[7] + numBlob[8] - numBlob[9] + numBlob[10]) % 10;
+    }
+</script>
