@@ -37,7 +37,7 @@
 <script>
     function computeLicenseNumber() {
         const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
-        const middleName = getFirstInitial(document.getElementById("middleName").value.toUpperCase());
+        const middleName = getMiddleInitial(document.getElementById("middleName").value.toUpperCase());
         const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
         const birthDay = encodeDay(document.getElementById("birthDay").value);
         const birthMonth = encodeMonth(document.getElementById("birthMonth").value);
@@ -53,6 +53,10 @@
 
     function getFirstInitial(name) {
         return name[0];
+    }
+
+    function getMiddleInitial(name) {
+        return getFirstInitial(name) || "*";
     }
 
     function encodeLastName(name) {
