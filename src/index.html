@@ -1,13 +1,13 @@
 <html>
 
 <label for="firstName">First name</label>
-<input id="firstName" placeholder="Jane" type="text" />
+<input id="firstName" value="Jane" placeholder="Jane" type="text" />
 <br />
 <label for="middleName">Middle name</label>
-<input id="middleName" placeholder="Marie" type="text" />
+<input id="middleName" value="Marie" placeholder="Marie" type="text" />
 <br />
 <label for="lastName">Last name</label>
-<input id="lastName" placeholder="Doe" type="text" />
+<input id="lastName" value="Doe" placeholder="Doe" type="text" />
 <br />
 <label for="birthMonth">Month</label>
 <select id="birthMonth">
@@ -25,9 +25,9 @@
     <option value="12">December</option>
 </select>
 <label for="birthDay">Day</label>
-<input id="birthDay" style="width: 25px" />
+<input id="birthDay" value="1" style="width: 25px" />
 <label for="birthYear">Year</label>
-<input id="birthYear" style="width: 50px" />
+<input id="birthYear" value="2005" style="width: 50px" />
 <br />
 <button id="submit" onclick="computeLicenseNumber()">submit</button>
 
@@ -122,6 +122,6 @@
                 numBlob += blob[i];
             }
         }
-        return (numBlob[0] - numBlob[1] + numBlob[2] - numBlob[3] + numBlob[4] - numBlob[5] + numBlob[6] - numBlob[7] + numBlob[8] - numBlob[9] + numBlob[10]) % 10;
+        return Math.abs(numBlob[0] - numBlob[1] + numBlob[2] - numBlob[3] + numBlob[4] - numBlob[5] + numBlob[6] - numBlob[7] + numBlob[8] - numBlob[9] + numBlob[10]) % 10;
     }
 </script>
