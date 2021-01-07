@@ -36,19 +36,16 @@
 </html>
 <script>
     function computeLicenseNumber() {
+        const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
         const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
         const middleName = getMiddleInitial(document.getElementById("middleName").value.toUpperCase());
-        const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
         const birthDay = encodeDay(document.getElementById("birthDay").value);
         const birthMonth = encodeMonth(document.getElementById("birthMonth").value);
         const birthYear = encodeYear(document.getElementById("birthYear").value);
 
-        const blobStart = lastName + firstName + middleName + birthYear
-        const blobFinish = birthMonth + birthDay;
-        const cs = checkSum(blobStart + blobFinish);
+        const checkDigit = checkSum(lastName, firstName, middleName, birthYear, birthMonth, birthDay);
 
-        const DLN = blobStart + cs + blobFinish;
-        alert(DLN);
+        alert(`${lastName}${firstName}${middleName}${birthYear}${checkDigit}${birthMonth}${birthDay}`);
     }
 
     function getFirstInitial(name) {
@@ -83,8 +80,8 @@
 
     function encodeDay(day) {
         let days = [
-            "A", 
-            "B", 
+            "A",
+            "B",
             "C",
             "D",
             "E",
@@ -117,7 +114,26 @@
         return days[day - 1];
     }
 
-    function checkSum(blob) {
+    function checkSum(last, first, middle, year, month, day) {
+        let l1 = convertToDigit(last.substring(0,1));
+        let l2 = convertToDigit(last.substring(1,2));
+        let l3 = convertToDigit(last.substring(2,3));
+        let l4 = convertToDigit(last.substring(3,4));
+        let l5 = convertToDigit(last.substring(4,5));
+        let f = convertToDigit(first);
+        let mi = convertToDigit(middle);
+        let y1 = convertToDigit(year.toString().substring(0, 1));
+        let y2 = convertToDigit(year.toString().substring(1, 2));
+        let mo = convertToDigit(month);
+        let d = convertToDigit(day);
+
+        let checkSumDigit = Math.abs(l1 - l2 + l3 - l4 + l5 - f + mi - y1 + y2 - mo + d) % 10;
+
+        return checkSumDigit;
+    }
+
+    function convertToDigit(character) {
+        let convertedDigit;
         let nanDigits = {
             "*": "0",
             "A": "1",
@@ -148,27 +164,12 @@
             "Z": "9"
         }
 
-        let numBlob = "";
-        for (i = 0; i < blob.length; i++) {
-            if (isNaN(blob[i])) {
-                numBlob += nanDigits[blob[i].toUpperCase()];
-            }
-            else {
-                numBlob += blob[i];
-            }
+        if (isNaN(character)) {
+            convertedDigit = nanDigits[character.toUpperCase()];
         }
-        return Math.abs(
-            Number(numBlob[0]) 
-            - Number(numBlob[1]) 
-            + Number(numBlob[2]) 
-            - Number(numBlob[3]) 
-            + Number(numBlob[4]) 
-            - Number(numBlob[5]) 
-            + Number(numBlob[6]) 
-            - Number(numBlob[7]) 
-            + Number(numBlob[8]) 
-            - Number(numBlob[9]) 
-            + Number(numBlob[10]))
-             % 10;
+        else {
+            convertedDigit = character;
+        }
+        return Number(convertedDigit);
     }
 </script>
