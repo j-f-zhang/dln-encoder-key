@@ -1,175 +1,180 @@
 <html>
 
-<label for="firstName">First name</label>
-<input id="firstName" value="Joseph" type="text" />
-<br />
-<label for="middleName">Middle name</label>
-<input id="middleName" value="Marshall" type="text" />
-<br />
-<label for="lastName">Last name</label>
-<input id="lastName" value="Pollan" type="text" />
-<br />
-<label for="birthMonth">Month</label>
-<select id="birthMonth">
-    <option value="1">January</option>
-    <option value="2">February</option>
-    <option value="3">March</option>
-    <option value="4">April</option>
-    <option value="5">May</option>
-    <option value="6">June</option>
-    <option value="7">July</option>
-    <option value="8">August</option>
-    <option value="9">September</option>
-    <option selected="selected" value="10">October</option>
-    <option value="11">November</option>
-    <option value="12">December</option>
-</select>
-<label for="birthDay">Day</label>
-<input id="birthDay" value="19" style="width: 25px" />
-<label for="birthYear">Year</label>
-<input id="birthYear" value="1970" style="width: 50px" />
-<br />
-<button id="submit" onclick="computeLicenseNumber()">submit</button>
+<head>
+    <script>
+        function computeLicenseNumber() {
+            const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
+            const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
+            const middleName = getMiddleInitial(document.getElementById("middleName").value.toUpperCase());
+            const birthDay = encodeDay(document.getElementById("birthDay").value);
+            const birthMonth = encodeMonth(document.getElementById("birthMonth").value);
+            const birthYear = encodeYear(document.getElementById("birthYear").value);
 
-<p></p>
+            const checkDigit = checkSum(lastName, firstName, middleName, birthYear, birthMonth, birthDay);
 
-</html>
-<script>
-    function computeLicenseNumber() {
-        const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
-        const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
-        const middleName = getMiddleInitial(document.getElementById("middleName").value.toUpperCase());
-        const birthDay = encodeDay(document.getElementById("birthDay").value);
-        const birthMonth = encodeMonth(document.getElementById("birthMonth").value);
-        const birthYear = encodeYear(document.getElementById("birthYear").value);
+            alert(`${lastName}${firstName}${middleName}${birthYear}${checkDigit}${birthMonth}${birthDay}`);
+        }
 
-        const checkDigit = checkSum(lastName, firstName, middleName, birthYear, birthMonth, birthDay);
+        function getFirstInitial(name) {
+            return name[0];
+        }
 
-        alert(`${lastName}${firstName}${middleName}${birthYear}${checkDigit}${birthMonth}${birthDay}`);
-    }
+        function getMiddleInitial(name) {
+            return getFirstInitial(name) || "*";
+        }
 
-    function getFirstInitial(name) {
-        return name[0];
-    }
+        function encodeLastName(name) {
+            let code = "";
+            for (let i = 0; i < 5; i++) {
+                if (name.length > i) {
+                    code += name[i];
+                }
+                else {
+                    code += "*";
+                }
+            }
+            return code;
+        }
 
-    function getMiddleInitial(name) {
-        return getFirstInitial(name) || "*";
-    }
+        function encodeYear(year) {
+            return 100 - year.substring(year.length - 2, year.length);
+        }
 
-    function encodeLastName(name) {
-        let code = "";
-        for (let i = 0; i < 5; i++) {
-            if (name.length > i) {
-                code += name[i];
+        function encodeMonth(month) {
+            let months = ["B", "C", "D", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
+            return months[month - 1];
+        }
+
+        function encodeDay(day) {
+            let days = [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "Z",
+                "S",
+                "J",
+                "K",
+                "L",
+                "M",
+                "N",
+                "W",
+                "P",
+                "Q",
+                "R",
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "2",
+                "7",
+                "8",
+                "9",
+                "T",
+                "U"];
+            return days[day - 1];
+        }
+
+        function checkSum(last, first, middle, year, month, day) {
+            let l1 = convertToDigit(last.substring(0, 1));
+            let l2 = convertToDigit(last.substring(1, 2));
+            let l3 = convertToDigit(last.substring(2, 3));
+            let l4 = convertToDigit(last.substring(3, 4));
+            let l5 = convertToDigit(last.substring(4, 5));
+            let f = convertToDigit(first);
+            let mi = convertToDigit(middle);
+            let y1 = convertToDigit(year.toString().substring(0, 1));
+            let y2 = convertToDigit(year.toString().substring(1, 2));
+            let mo = convertToDigit(month);
+            let d = convertToDigit(day);
+
+            let checkSumDigit = Math.abs(l1 - l2 + l3 - l4 + l5 - f + mi - y1 + y2 - mo + d) % 10;
+
+            return checkSumDigit;
+        }
+
+        function convertToDigit(character) {
+            let convertedDigit;
+            let nanDigits = {
+                "*": "0",
+                "A": "1",
+                "B": "2",
+                "C": "3",
+                "D": "4",
+                "E": "5",
+                "F": "6",
+                "G": "7",
+                "H": "8",
+                "I": "9",
+                "J": "1",
+                "K": "2",
+                "L": "3",
+                "M": "4",
+                "N": "5",
+                "O": "6",
+                "P": "7",
+                "Q": "8",
+                "R": "9",
+                "S": "2",
+                "T": "3",
+                "U": "4",
+                "V": "5",
+                "W": "6",
+                "X": "7",
+                "Y": "8",
+                "Z": "9"
+            }
+
+            if (isNaN(character)) {
+                convertedDigit = nanDigits[character.toUpperCase()];
             }
             else {
-                code += "*";
+                convertedDigit = character;
             }
+            return Number(convertedDigit);
         }
-        return code;
-    }
+    </script>
+</head>
 
-    function encodeYear(year) {
-        return 100 - year.substring(year.length - 2, year.length);
-    }
+<body>
 
-    function encodeMonth(month) {
-        let months = ["B", "C", "D", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
-        return months[month - 1];
-    }
+    <label for="firstName">First name</label>
+    <input id="firstName" value="Joseph" type="text" />
+    <br />
+    <label for="middleName">Middle name</label>
+    <input id="middleName" value="Marshall" type="text" />
+    <br />
+    <label for="lastName">Last name</label>
+    <input id="lastName" value="Pollan" type="text" />
+    <br />
+    <label for="birthMonth">Month</label>
+    <select id="birthMonth">
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option selected="selected" value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+    </select>
+    <label for="birthDay">Day</label>
+    <input id="birthDay" value="19" style="width: 25px" />
+    <label for="birthYear">Year</label>
+    <input id="birthYear" value="1970" style="width: 50px" />
+    <br />
+    <button id="submit" onclick="computeLicenseNumber()">submit</button>
 
-    function encodeDay(day) {
-        let days = [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "Z",
-            "S",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "W",
-            "P",
-            "Q",
-            "R",
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "2",
-            "7",
-            "8",
-            "9",
-            "T",
-            "U"];
-        return days[day - 1];
-    }
+</body>
 
-    function checkSum(last, first, middle, year, month, day) {
-        let l1 = convertToDigit(last.substring(0,1));
-        let l2 = convertToDigit(last.substring(1,2));
-        let l3 = convertToDigit(last.substring(2,3));
-        let l4 = convertToDigit(last.substring(3,4));
-        let l5 = convertToDigit(last.substring(4,5));
-        let f = convertToDigit(first);
-        let mi = convertToDigit(middle);
-        let y1 = convertToDigit(year.toString().substring(0, 1));
-        let y2 = convertToDigit(year.toString().substring(1, 2));
-        let mo = convertToDigit(month);
-        let d = convertToDigit(day);
-
-        let checkSumDigit = Math.abs(l1 - l2 + l3 - l4 + l5 - f + mi - y1 + y2 - mo + d) % 10;
-
-        return checkSumDigit;
-    }
-
-    function convertToDigit(character) {
-        let convertedDigit;
-        let nanDigits = {
-            "*": "0",
-            "A": "1",
-            "B": "2",
-            "C": "3",
-            "D": "4",
-            "E": "5",
-            "F": "6",
-            "G": "7",
-            "H": "8",
-            "I": "9",
-            "J": "1",
-            "K": "2",
-            "L": "3",
-            "M": "4",
-            "N": "5",
-            "O": "6",
-            "P": "7",
-            "Q": "8",
-            "R": "9",
-            "S": "2",
-            "T": "3",
-            "U": "4",
-            "V": "5",
-            "W": "6",
-            "X": "7",
-            "Y": "8",
-            "Z": "9"
-        }
-
-        if (isNaN(character)) {
-            convertedDigit = nanDigits[character.toUpperCase()];
-        }
-        else {
-            convertedDigit = character;
-        }
-        return Number(convertedDigit);
-    }
-</script>
+</html>
