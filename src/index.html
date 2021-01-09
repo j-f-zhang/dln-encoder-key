@@ -2,7 +2,7 @@
 
 <head>
     <script>
-        function computeLicenseNumber() {
+        function showEncodedLicenseNumber() {
             const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
             const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
             const middleName = getMiddleInitial(document.getElementById("middleName").value.toUpperCase());
@@ -12,7 +12,7 @@
 
             const checkDigit = checkSum(lastName, firstName, middleName, birthYear, birthMonth, birthDay);
 
-            alert(`${lastName}${firstName}${middleName}${birthYear}${checkDigit}${birthMonth}${birthDay}`);
+            alert(lastName + firstName + middleName + birthYear + checkDigit + birthMonth + birthDay);
         }
 
         function getFirstInitial(name) {
@@ -24,14 +24,16 @@
         }
 
         function encodeLastName(name) {
-            let code = "";
-            for (let i = 0; i < 5; i++) {
+            var code = "";
+            var i = 0;
+            while (i < 5) {
                 if (name.length > i) {
                     code += name[i];
                 }
                 else {
                     code += "*";
                 }
+                i++;
             }
             return code;
         }
@@ -41,12 +43,12 @@
         }
 
         function encodeMonth(month) {
-            let months = ["B", "C", "D", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
+            var months = ["B", "C", "D", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
             return months[month - 1];
         }
 
         function encodeDay(day) {
-            let days = [
+            var days = [
                 "A",
                 "B",
                 "C",
@@ -82,26 +84,26 @@
         }
 
         function checkSum(last, first, middle, year, month, day) {
-            let l1 = convertToDigit(last.substring(0, 1));
-            let l2 = convertToDigit(last.substring(1, 2));
-            let l3 = convertToDigit(last.substring(2, 3));
-            let l4 = convertToDigit(last.substring(3, 4));
-            let l5 = convertToDigit(last.substring(4, 5));
-            let f = convertToDigit(first);
-            let mi = convertToDigit(middle);
-            let y1 = convertToDigit(year.toString().substring(0, 1));
-            let y2 = convertToDigit(year.toString().substring(1, 2));
-            let mo = convertToDigit(month);
-            let d = convertToDigit(day);
+            var l1 = convertToDigit(last.substring(0, 1));
+            var l2 = convertToDigit(last.substring(1, 2));
+            var l3 = convertToDigit(last.substring(2, 3));
+            var l4 = convertToDigit(last.substring(3, 4));
+            var l5 = convertToDigit(last.substring(4, 5));
+            var f = convertToDigit(first);
+            var mi = convertToDigit(middle);
+            var y1 = convertToDigit(year.toString().substring(0, 1));
+            var y2 = convertToDigit(year.toString().substring(1, 2));
+            var mo = convertToDigit(month);
+            var d = convertToDigit(day);
 
-            let checkSumDigit = Math.abs(l1 - l2 + l3 - l4 + l5 - f + mi - y1 + y2 - mo + d) % 10;
+            var checkSumDigit = Math.abs(l1 - l2 + l3 - l4 + l5 - f + mi - y1 + y2 - mo + d) % 10;
 
             return checkSumDigit;
         }
 
         function convertToDigit(character) {
-            let convertedDigit;
-            let nanDigits = {
+            var convertedDigit;
+            var nanDigits = {
                 "*": "0",
                 "A": "1",
                 "B": "2",
@@ -173,7 +175,7 @@
     <label for="birthYear">Year</label>
     <input id="birthYear" value="1970" style="width: 50px" />
     <br />
-    <button id="submit" onclick="computeLicenseNumber()">submit</button>
+    <button id="submit" onclick="showEncodedLicenseNumber()">submit</button>
 
 </body>
 
