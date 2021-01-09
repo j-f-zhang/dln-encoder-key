@@ -3,12 +3,12 @@
 <head>
     <script>
         function showEncodedLicenseNumber() {
-            const lastName = encodeLastName(document.getElementById("lastName").value.toUpperCase());
+            const lastName = getEncodedLastName(document.getElementById("lastName").value.toUpperCase());
             const firstName = getFirstInitial(document.getElementById("firstName").value.toUpperCase());
             const middleName = getMiddleInitial(document.getElementById("middleName").value.toUpperCase());
-            const birthDay = encodeDay(document.getElementById("birthDay").value);
-            const birthMonth = encodeMonth(document.getElementById("birthMonth").value);
-            const birthYear = encodeYear(document.getElementById("birthYear").value);
+            const birthDay = getEncodedDay(document.getElementById("birthDay").value);
+            const birthMonth = getEncodedMonth(document.getElementById("birthMonth").value);
+            const birthYear = getEncodedYear(document.getElementById("birthYear").value);
 
             const checkDigit = checkSum(lastName, firstName, middleName, birthYear, birthMonth, birthDay);
 
@@ -23,7 +23,7 @@
             return getFirstInitial(name) || "*";
         }
 
-        function encodeLastName(name) {
+        function getEncodedLastName(name) {
             var code = "";
             var i = 0;
             while (i < 5) {
@@ -38,16 +38,16 @@
             return code;
         }
 
-        function encodeYear(year) {
+        function getEncodedYear(year) {
             return 100 - year.substring(year.length - 2, year.length);
         }
 
-        function encodeMonth(month) {
+        function getEncodedMonth(month) {
             var months = ["B", "C", "D", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
             return months[month - 1];
         }
 
-        function encodeDay(day) {
+        function getEncodedDay(day) {
             var days = [
                 "A",
                 "B",
